@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+/* === Custom Fonts === */
+@font-face {
+  font-family: 'Migra';
+  src: url('/fonts/Migra-Extrabold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tusker Grotesk';
+  src: url('/fonts/TuskerGrotesk-4500Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/NeueMontreal-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* True black, warm cream — matching matteomekhail.dev */
+  --color-surface-0: #000000;
+  --color-surface-50: #080808;
+  --color-surface-100: #0f0f0f;
+  --color-surface-150: #151515;
+  --color-surface-200: #1c1c1c;
+  --color-surface-300: #282828;
+  --color-surface-400: #3a3a3a;
+  --color-surface-500: #555;
+  --color-surface-600: #777;
+  --color-surface-700: #a0a0a0;
+  --color-surface-800: #ccc;
+  --color-surface-900: #e8d8cc;
+  --color-surface-950: #f5ebe3;
+
+  --color-violet: #8B5CF6;
+  --color-violet-soft: rgba(139, 92, 246, 0.1);
+  --color-violet-bold: rgba(139, 92, 246, 0.2);
+  --color-rose: #F43F5E;
+  --color-rose-soft: rgba(244, 63, 94, 0.1);
+  --color-rose-bold: rgba(244, 63, 94, 0.2);
+  --color-sky: #38BDF8;
+  --color-sky-soft: rgba(56, 189, 248, 0.1);
+  --color-sky-bold: rgba(56, 189, 248, 0.2);
+  --color-teal: #14B8A6;
+  --color-teal-soft: rgba(20, 184, 166, 0.1);
+  --color-amber: #F59E0B;
+
+  --color-accent: #e8d8cc;
+  --color-accent-soft: rgba(232, 216, 204, 0.08);
+  --color-accent-subtle: rgba(232, 216, 204, 0.04);
+  --color-accent-text: #e8d8cc;
+
+  --color-ok: #34d399;
+  --color-fail: #f87171;
+
+  --font-display: "Migra", Georgia, serif;
+  --font-body: "Neue Montreal", "SF Mono", monospace;
+  --font-modern: "Tusker Grotesk", system-ui, sans-serif;
+}
+
+/* Light theme */
+:root[data-theme="light"] {
+  --color-surface-0: #f5ebe3;
+  --color-surface-50: #efe4db;
+  --color-surface-100: #e8dcd2;
+  --color-surface-150: #dfd3c9;
+  --color-surface-200: #d4c8be;
+  --color-surface-300: #c0b4aa;
+  --color-surface-400: #9e9490;
+  --color-surface-500: #7a726e;
+  --color-surface-600: #58524e;
+  --color-surface-700: #3a3634;
+  --color-surface-800: #222;
+  --color-surface-900: #141212;
+  --color-surface-950: #0a0808;
+  --color-accent: #1a1614;
+  --color-accent-soft: rgba(26, 22, 20, 0.06);
+  --color-accent-text: #1a1614;
+}
+
+html { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+
+body {
+  background: var(--color-surface-0);
+  color: var(--color-surface-900);
+  font-family: var(--font-body);
+  margin: 0;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+}
+
+/* Grain */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px;
+}
+:root[data-theme="light"] body::after { opacity: 0.02; }
+
+#root { min-height: 100dvh; display: flex; position: relative; }
+
+.perspective-1000 { perspective: 1200px; }
+.preserve-3d { transform-style: preserve-3d; }
+.backface-hidden { backface-visibility: hidden; }
+.rotate-y-180 { transform: rotateY(180deg); }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-surface-300); border-radius: 2px; }
+
+::selection { background: rgba(232, 216, 204, 0.2); color: #fff; }
+
+@keyframes float-a { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,-40px) scale(1.05)} }
+@keyframes float-b { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-25px,30px) scale(1.03)} }
+@keyframes float-c { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(15px,20px) scale(0.97)} }
