@@ -21,7 +21,7 @@ export async function chatCompletion(
       model: settings.model,
       messages,
       temperature: 0.7,
-      max_tokens: 4096,
+      max_tokens: 16384,
     }),
   })
 
@@ -52,7 +52,7 @@ export async function chatCompletionStream(
       model: settings.model,
       messages,
       temperature: 0.7,
-      max_tokens: 4096,
+      max_tokens: 16384,
       stream: true,
     }),
     signal,

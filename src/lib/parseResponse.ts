@@ -114,6 +114,22 @@ export function parseJSON<T>(raw: string): T {
     } catch {
       // continue
     }
+
+    // Strategy 4: truncated JSON array — try to recover partial results
+    if (raw[start] === '[') {
+      const partial = raw.slice(start)
+      // Find the last complete object (ending with })
+      const lastComplete = partial.lastIndexOf('}')
+      if (lastComplete > 0) {
+        const repaired = partial.slice(0, lastComplete + 1) + ']'
+        try {
+          const result = JSON.parse(repaired) as T
+          if (Array.isArray(result) && result.length > 0) return result
+        } catch {
+          // continue
+        }
+      }
+    }
   }
 
   throw new Error('Could not parse AI response as JSON. The model returned an unexpected format.')

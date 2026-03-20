@@ -26,22 +26,26 @@ export function useAI<T>(settings: AISettings): UseAIReturn<T> {
       setLoading(true)
       setError(null)
 
-      try {
-        const raw = await chatCompletion(settings, [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userContent },
-        ])
+      const maxRetries = 2
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const raw = await chatCompletion(settings, [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userContent },
+          ])
 
-        const parsed = parseJSON<T>(raw)
-        setData(parsed)
-        return parsed
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'Unknown error'
-        setError(message)
-        return null
-      } finally {
-        setLoading(false)
+          const parsed = parseJSON<T>(raw)
+          setData(parsed)
+          return parsed
+        } catch (err) {
+          if (attempt < maxRetries) continue
+          const message = err instanceof Error ? err.message : 'Unknown error'
+          setError(message)
+          return null
+        }
       }
+      setLoading(false)
+      return null
     },
     [settings],
   )
