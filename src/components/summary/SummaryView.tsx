@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { List, Network, Copy } from 'lucide-react'
+import { List, Network, Copy, Sparkles } from 'lucide-react'
 import { motion } from 'motion/react'
 import type { AISettings, Summary } from '../../types'
 import { chatCompletionStream } from '../../lib/ai'
@@ -193,7 +193,7 @@ export function SummaryView({ settings }: SummaryViewProps) {
                   <motion.div key={msg.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
                     <div className="flex items-start gap-3 mb-4">
                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-soft to-teal-soft border border-surface-200 flex items-center justify-center text-[14px] shrink-0">
-                        🧠
+                        <Sparkles size={14} className="text-surface-600" />
                       </div>
                       <p className="text-[13px] text-surface-600 pt-2">
                         Writing your <span className="font-semibold text-sky">summary</span>…
@@ -207,7 +207,7 @@ export function SummaryView({ settings }: SummaryViewProps) {
                   <motion.div key={msg.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
                     <div className="flex items-start gap-3 mb-4">
                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-soft to-teal-soft border border-surface-200 flex items-center justify-center text-[14px] shrink-0">
-                        🧠
+                        <Sparkles size={14} className="text-surface-600" />
                       </div>
                       <p className="text-[13px] text-surface-600 pt-2">
                         Here&apos;s your <span className="font-semibold text-sky">summary</span>

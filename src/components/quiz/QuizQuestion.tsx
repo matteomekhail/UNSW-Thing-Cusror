@@ -5,17 +5,17 @@ import type { QuizQuestion as QuizQ } from '../../types'
 
 interface QuizQuestionProps {
   question: QuizQ
-  onAnswer: (correct: boolean) => void
+  onSelect: (correct: boolean) => void
 }
 
-export function QuizQuestion({ question, onAnswer }: QuizQuestionProps) {
+export function QuizQuestion({ question, onSelect }: QuizQuestionProps) {
   const [selected, setSelected] = useState<number | null>(null)
   const answered = selected !== null
 
   const handleSelect = (i: number) => {
     if (answered) return
     setSelected(i)
-    setTimeout(() => onAnswer(i === question.correctIndex), 1500)
+    onSelect(i === question.correctIndex)
   }
 
   return (
@@ -67,17 +67,6 @@ export function QuizQuestion({ question, onAnswer }: QuizQuestionProps) {
           )
         })}
       </div>
-
-      {answered && (
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="p-5 rounded-2xl border border-rose/15 bg-rose-soft text-[13px] text-surface-800 leading-relaxed"
-        >
-          <span className="font-display font-bold text-rose text-[11px] uppercase tracking-wider">Why? </span>
-          <span className="ml-1">{question.explanation}</span>
-        </motion.div>
-      )}
     </motion.div>
   )
 }

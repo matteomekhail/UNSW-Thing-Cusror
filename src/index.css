@@ -26,19 +26,19 @@
 }
 
 @theme {
-  /* True black, warm cream — matching matteomekhail.dev */
-  --color-surface-0: #000000;
-  --color-surface-50: #080808;
-  --color-surface-100: #0f0f0f;
-  --color-surface-150: #151515;
-  --color-surface-200: #1c1c1c;
-  --color-surface-300: #282828;
-  --color-surface-400: #3a3a3a;
-  --color-surface-500: #555;
-  --color-surface-600: #777;
-  --color-surface-700: #a0a0a0;
-  --color-surface-800: #ccc;
-  --color-surface-900: #e8d8cc;
+  /* Warm dark — soft charcoal with warm undertones */
+  --color-surface-0: #1a1715;
+  --color-surface-50: #1f1c19;
+  --color-surface-100: #252220;
+  --color-surface-150: #2b2826;
+  --color-surface-200: #322f2c;
+  --color-surface-300: #3e3a37;
+  --color-surface-400: #524e4a;
+  --color-surface-500: #6b6660;
+  --color-surface-600: #8a847d;
+  --color-surface-700: #a8a29b;
+  --color-surface-800: #cdc5bb;
+  --color-surface-900: #e8ddd2;
   --color-surface-950: #f5ebe3;
 
   --color-violet: #8B5CF6;
@@ -107,12 +107,12 @@ body::after {
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.12;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px;
 }
-:root[data-theme="light"] body::after { opacity: 0.02; }
+:root[data-theme="light"] body::after { opacity: 0.03; }
 
 #root { min-height: 100dvh; display: flex; position: relative; }
 

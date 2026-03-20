@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Lightbulb, CheckCircle, Trophy } from 'lucide-react'
+import { Lightbulb, CheckCircle, Trophy, Sparkles, ArrowRight } from 'lucide-react'
 import { motion } from 'motion/react'
 import type { AISettings, QuizQuestion as QuizQ } from '../../types'
 import { useAI } from '../../hooks/useAI'
@@ -33,8 +33,10 @@ export function QuizView({ settings }: QuizViewProps) {
   const [sentTexts, setSentTexts] = useState<{ id: number; text: string }[]>([])
   const [isThinking, setIsThinking] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [pendingAnswer, setPendingAnswer] = useState<{ sessionIdx: number; correct: boolean } | null>(null)
   const { generate } = useAI<QuizQ[]>(settings)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const idRef = useRef(0)
 
   const handleGenerate = async () => {
@@ -55,7 +57,13 @@ export function QuizView({ settings }: QuizViewProps) {
     }
   }
 
-  const handleAnswer = (sessionIdx: number, correct: boolean) => {
+  const handleSelect = (sessionIdx: number, correct: boolean) => {
+    setPendingAnswer({ sessionIdx, correct })
+  }
+
+  const handleNext = () => {
+    if (!pendingAnswer) return
+    const { sessionIdx, correct } = pendingAnswer
     setSessions((prev) => {
       const s = [...prev]
       const session = { ...s[sessionIdx] }
@@ -68,17 +76,24 @@ export function QuizView({ settings }: QuizViewProps) {
       s[sessionIdx] = session
       return s
     })
+    setPendingAnswer(null)
   }
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'instant' })
+    // When a quiz finishes, scroll to top; otherwise scroll to bottom
+    const justFinished = sessions.some((s) => s.done && s.answers.length === s.questions.length)
+    if (justFinished) {
+      scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      bottomRef.current?.scrollIntoView({ behavior: 'instant' })
+    }
   }, [sentTexts, sessions, isThinking])
 
   const hasContent = sentTexts.length > 0
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto px-5 sm:px-8 lg:px-10 pt-8 pb-4">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 sm:px-8 lg:px-10 pt-8 pb-4">
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <h2 className="font-display font-extrabold text-[30px] sm:text-[38px] tracking-tight leading-tight">
             <span className="bg-gradient-to-r from-rose to-orange-400 bg-clip-text text-transparent">Quiz</span>
@@ -107,11 +122,25 @@ export function QuizView({ settings }: QuizViewProps) {
                   {session && !session.done && (
                     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
                       <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-rose-soft to-amber/10 border border-surface-200 flex items-center justify-center text-[14px] shrink-0">🧠</div>
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-rose-soft to-amber/10 border border-surface-200 flex items-center justify-center shrink-0"><Sparkles size={14} className="text-surface-600" /></div>
                         <p className="text-[13px] text-surface-600 pt-2"><span className="font-semibold text-rose">{session.questions.length} questions</span> — good luck!</p>
                       </div>
-                      <QuizProgress current={session.currentQ} total={session.questions.length} />
-                      <QuizQuestion key={`${session.id}-${session.currentQ}`} question={session.questions[session.currentQ]} onAnswer={(c) => handleAnswer(i, c)} />
+
+                      <div className="flex items-end gap-3">
+                        <div className="flex-1 min-w-0">
+                          <QuizProgress current={session.currentQ} total={session.questions.length} />
+                        </div>
+                        <button
+                          onClick={handleNext}
+                          disabled={!pendingAnswer || pendingAnswer.sessionIdx !== i}
+                          className="shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-surface-900 text-surface-0 text-[12px] font-semibold transition-all active:scale-95 disabled:opacity-20 disabled:cursor-not-allowed enabled:hover:opacity-90"
+                        >
+                          Next
+                          <ArrowRight size={12} />
+                        </button>
+                      </div>
+
+                      <QuizQuestion key={`${session.id}-${session.currentQ}`} question={session.questions[session.currentQ]} onSelect={(c) => handleSelect(i, c)} />
                     </motion.div>
                   )}
                   {session && session.done && (

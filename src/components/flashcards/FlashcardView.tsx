@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Brain, RotateCcw, Keyboard } from 'lucide-react'
+import { Brain, RotateCcw, Keyboard, Sparkles } from 'lucide-react'
 import { motion } from 'motion/react'
 import type { AISettings, Flashcard } from '../../types'
 import { useAI } from '../../hooks/useAI'
@@ -71,7 +71,7 @@ export function FlashcardView({ settings }: FlashcardViewProps) {
               if (msg.type === 'result' && msg.cards) return (
                 <motion.div key={msg.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
                   <div className="flex items-start gap-3 mb-4">
-                    <div className="w-8 h-8 border border-surface-300 flex items-center justify-center text-[14px] shrink-0">🧠</div>
+                    <div className="w-8 h-8 border border-surface-300 flex items-center justify-center shrink-0"><Sparkles size={14} className="text-surface-600" /></div>
                     <p className="text-[13px] text-surface-600 pt-2 font-body">here are your <span className="text-surface-900">{msg.cards.length} flashcards</span></p>
                   </div>
                   <FlashcardDeck cards={msg.cards} />
