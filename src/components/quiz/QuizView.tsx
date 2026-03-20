@@ -171,13 +171,16 @@ export function QuizView({ settings }: QuizViewProps) {
         loading={isThinking}
         placeholder="Paste your study notes here..."
         controls={
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] text-surface-500 uppercase tracking-wider font-bold font-display">Questions</span>
-            {[5, 10, 15, 20].map((n) => (
-              <button key={n} onClick={() => setCount(n)}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${count === n ? 'bg-rose-bold text-rose border border-rose/30' : 'text-surface-500 border border-surface-300 hover:border-rose/30'}`}
-              >{n}</button>
-            ))}
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-surface-500 uppercase tracking-wider font-bold font-display">Questions</span>
+              {[5, 10, 15, 20].map((n) => (
+                <button key={n} onClick={() => setCount(n)}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${count === n ? 'bg-rose-bold text-rose border border-rose/30' : 'text-surface-500 border border-surface-300 hover:border-rose/30'}`}
+                >{n}</button>
+              ))}
+            </div>
+            {hasContent && <SampleNotes onSelect={setNotes} compact />}
           </div>
         }
       />

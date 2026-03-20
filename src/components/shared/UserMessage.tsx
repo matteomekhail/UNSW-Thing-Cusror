@@ -5,7 +5,7 @@ interface UserMessageProps {
 }
 
 export function UserMessage({ text }: UserMessageProps) {
-  const preview = text.length > 300 ? text.slice(0, 300) + '…' : text
+  const preview = text.length > 800 ? text.slice(0, 800) + '…' : text
 
   return (
     <motion.div

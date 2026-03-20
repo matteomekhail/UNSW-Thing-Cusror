@@ -95,13 +95,16 @@ export function FlashcardView({ settings }: FlashcardViewProps) {
         value={notes} onChange={setNotes} onSubmit={handleGenerate} loading={isThinking}
         placeholder="paste your study notes here..."
         controls={
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] text-surface-500 font-modern uppercase tracking-[0.12em]">cards</span>
-            {[5, 10, 15, 20].map((n) => (
-              <button key={n} onClick={() => setCount(n)}
-                className={`px-2.5 py-1 text-[11px] font-modern tracking-[0.04em] transition-all ${count === n ? 'bg-surface-900 text-surface-0' : 'text-surface-500 border border-surface-300 hover:text-surface-800'}`}
-              >{n}</button>
-            ))}
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-surface-500 font-modern uppercase tracking-[0.12em]">cards</span>
+              {[5, 10, 15, 20].map((n) => (
+                <button key={n} onClick={() => setCount(n)}
+                  className={`px-2.5 py-1 text-[11px] font-modern tracking-[0.04em] transition-all ${count === n ? 'bg-surface-900 text-surface-0' : 'text-surface-500 border border-surface-300 hover:text-surface-800'}`}
+                >{n}</button>
+              ))}
+            </div>
+            {messages.length > 0 && <SampleNotes onSelect={setNotes} compact />}
           </div>
         }
       />
