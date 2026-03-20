@@ -38,6 +38,15 @@ function parseConceptsBody(body: string): string[] {
   return [joined]
 }
 
+/** Parse partial markdown during streaming — tolerates incomplete text. */
+export function parsePartialSummary(raw: string): Summary {
+  return {
+    bulletPoints: parseBulletLines(extractMarkdownSection(raw, 'Key Points')),
+    keyConcepts: parseConceptsBody(extractMarkdownSection(raw, 'Key Concepts')),
+    connections: parseBulletLines(extractMarkdownSection(raw, 'Connections')),
+  }
+}
+
 /** Prefer markdown sections from streamed output; fall back to JSON. */
 export function parseSummaryFromStream(raw: string): Summary {
   const bulletPoints = parseBulletLines(extractMarkdownSection(raw, 'Key Points'))

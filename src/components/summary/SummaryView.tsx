@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { List, Network, Copy, Sparkles } from 'lucide-react'
 import { motion } from 'motion/react'
 import type { AISettings, Summary } from '../../types'
 import { chatCompletionStream } from '../../lib/ai'
 import { summaryStreamPrompt } from '../../lib/prompts'
-import { parseSummaryFromStream } from '../../lib/parseResponse'
+import { parseSummaryFromStream, parsePartialSummary } from '../../lib/parseResponse'
 import { ChatInput } from '../shared/ChatInput'
 import { FeatureCard } from '../shared/FeatureCard'
 import { SampleNotes } from '../shared/SampleNotes'
@@ -23,36 +23,9 @@ interface Message {
   streamText?: string
 }
 
-function StreamLoadingDots() {
-  return (
-    <div className="flex items-center gap-1.5 py-3" aria-hidden>
-      {[0, 1, 2].map((i) => (
-        <motion.div
-          key={i}
-          className="w-1.5 h-1.5 rounded-full bg-sky/60"
-          animate={{ y: [0, -5, 0], opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.15, ease: 'easeInOut' }}
-        />
-      ))}
-    </div>
-  )
-}
-
-function SummaryStreamPreview({ text, active }: { text: string; active: boolean }) {
-  return (
-    <div className="rounded-2xl border border-surface-200 bg-surface-50/80 px-5 py-4 min-h-[120px]">
-      {text ? (
-        <pre className="text-[13px] text-surface-800 leading-relaxed whitespace-pre-wrap font-sans m-0 font-normal">
-          {text}
-          {active ? (
-            <span className="inline-block w-2 h-4 ml-0.5 align-[-3px] bg-sky/80 animate-pulse rounded-sm" aria-hidden />
-          ) : null}
-        </pre>
-      ) : (
-        <StreamLoadingDots />
-      )}
-    </div>
-  )
+function StreamingSummary({ text }: { text: string }) {
+  const partial = useMemo(() => parsePartialSummary(text), [text])
+  return <SummaryDisplay summary={partial} streaming />
 }
 
 export function SummaryView({ settings }: SummaryViewProps) {
@@ -192,21 +165,21 @@ export function SummaryView({ settings }: SummaryViewProps) {
                 return (
                   <motion.div key={msg.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-soft to-teal-soft border border-surface-200 flex items-center justify-center text-[14px] shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-soft to-teal-soft border border-surface-200 flex items-center justify-center shrink-0">
                         <Sparkles size={14} className="text-surface-600" />
                       </div>
                       <p className="text-[13px] text-surface-600 pt-2">
                         Writing your <span className="font-semibold text-sky">summary</span>…
                       </p>
                     </div>
-                    <SummaryStreamPreview text={msg.streamText ?? ''} active />
+                    <StreamingSummary text={msg.streamText ?? ''} />
                   </motion.div>
                 )
               if (msg.type === 'result' && msg.summary)
                 return (
                   <motion.div key={msg.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-soft to-teal-soft border border-surface-200 flex items-center justify-center text-[14px] shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-soft to-teal-soft border border-surface-200 flex items-center justify-center shrink-0">
                         <Sparkles size={14} className="text-surface-600" />
                       </div>
                       <p className="text-[13px] text-surface-600 pt-2">
