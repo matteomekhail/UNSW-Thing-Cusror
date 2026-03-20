@@ -1,5 +1,4 @@
-import { Routes, Route, useLocation, matchPath } from 'react-router'
-import { motion } from 'motion/react'
+import { useLocation, matchPath } from 'react-router'
 import { useSettings } from './hooks/useSettings'
 import { useTheme } from './hooks/useTheme'
 import { Sidebar } from './components/layout/Sidebar'
