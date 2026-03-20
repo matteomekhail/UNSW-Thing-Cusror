@@ -214,6 +214,7 @@ export function SummaryView({ settings }: SummaryViewProps) {
         onSubmit={handleGenerate}
         loading={isStreaming}
         placeholder="Paste your study notes here..."
+        controls={hasMessages ? <SampleNotes onSelect={setNotes} compact /> : undefined}
       />
     </div>
   )
